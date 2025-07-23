@@ -23,7 +23,8 @@ int list_free(List *list) {
     list_goto_tail(list);
     while (list_has_prev(list)) {
       listS = list->listCurrent;
-      listS->value_free_func(listS->value);
+      if (listS->value_free_func!=NULL)
+        listS->value_free_func(listS->value);
       list_goto_prev(list);
       listS = list->listCurrent;
       free(listS->child);
@@ -34,10 +35,8 @@ int list_free(List *list) {
   return 0;
 }
 
-int list_goto_head(List *list) {{
-  return 0;
-}
-  if (list->listHead!=NULL) {
+int list_goto_head(List *list) {
+  if (list!=NULL && list->listHead!=NULL) {
     list->listCurrent = list->listHead;
     return 1;
   }
@@ -45,17 +44,15 @@ int list_goto_head(List *list) {{
 }
 
 int list_goto_tail(List *list) {
-  if (list!=NULL) {
-    if (list->listTail!=NULL) {
-      list->listCurrent = list->listTail;
-      return 1;
-    }
+  if (list!=NULL && list->listTail!=NULL) {
+    list->listCurrent = list->listTail;
+    return 1;
   }
   return 0;
 }
 
 int list_goto_next(List *list) {
-  if (list!=NULL) {
+  if (list!=NULL && list->listCurrent!=NULL) {
     listS = list->listCurrent;
     if (listS->child!=NULL) {
       list->listCurrent = listS->child;
@@ -66,7 +63,7 @@ int list_goto_next(List *list) {
 }
 
 int list_goto_prev(List *list) {
-  if (list!=NULL) {
+  if (list!=NULL && list->listCurrent!=NULL) {
     listS = list->listCurrent;
     if (listS->parent!=NULL) {
       list->listCurrent = listS->parent;
@@ -77,7 +74,7 @@ int list_goto_prev(List *list) {
 }
 
 int list_has_next(List *list) {
-  if (list!=NULL) {
+  if (list!=NULL && list->listCurrent!=NULL) {
     listS = list->listCurrent;
     if (listS->child!=NULL)
       return 1;
@@ -86,7 +83,7 @@ int list_has_next(List *list) {
 }
 
 int list_has_prev(List *list) {
-  if (list!=NULL) {
+  if (list!=NULL && list->listCurrent!=NULL) {
     listS = list->listCurrent;
     if (listS->parent!=NULL)
       return 1;
@@ -95,7 +92,7 @@ int list_has_prev(List *list) {
 }
 
 void *list_get_value(List *list) {
-  if (list!=NULL) {
+  if (list!=NULL && list->listCurrent!=NULL) {
     listS = list->listCurrent;
     return listS->value;
   }
@@ -113,7 +110,7 @@ int list_add_value_to_tail(List *list, void *value, void (*value_free_func)(void
     } else {
       listS = list->listTail;
       listS->child = (struct __ListStruct *) malloc(sizeof(struct __ListStruct));
-      memset(listS, 0, sizeof(struct __ListStruct));
+      memset(listS->child, 0, sizeof(struct __ListStruct));
       listS->child->parent = listS;
       listS = listS->child;
     }
@@ -124,5 +121,3 @@ int list_add_value_to_tail(List *list, void *value, void (*value_free_func)(void
   }
   return 0;
 }
-
-int main() {}
