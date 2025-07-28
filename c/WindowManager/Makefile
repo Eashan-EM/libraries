@@ -15,3 +15,9 @@ hyprDispatchWorkspace: test/hyprDispatchWorkspace.c winman
 
 runHyprDispatchWorkspace: hyprDispatchWorkspace
 	./test/hyprDispatchWorkspace
+
+hyprTest: test/hyprTest.c winman
+	gcc `pkg-config --libs json-c` windowmanager.o hyprland.o test/hyprTest.c -o test/hyprTest
+
+runHyprTest: hyprTest
+	./test/hyprTest

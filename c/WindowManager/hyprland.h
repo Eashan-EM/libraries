@@ -3,12 +3,20 @@ struct hypr_dispatch {
 };
 
 struct hypr_workspaces {
-  int active_workspace;
+  int id;
+  const char *name;
+  const char *monitor;
+  int monitor_id;
+  int windows;
+  int has_full_screen;
+  const char *last_window;
+  const char *last_window_title;
 };
 
 struct hyprland {
   struct hypr_dispatch dispatch;
-  struct hypr_workspaces workspaces;
+  struct hypr_workspaces active_workspace;
+  ;
 };
 
 int hyprland_setup();
